@@ -1,0 +1,2 @@
+https://www.programcreek.com/java-api-examples/?code=blynkkk/blynk-server/blynk-server-master/server/launcher/src/main/java/cc/blynk/server/workers/CertificateRenewalWorker.java#
+https://github.com/shred/acme4j/blob/master/acme4j-example/src/main/java/org/shredzone/acme4j/ClientTest.java

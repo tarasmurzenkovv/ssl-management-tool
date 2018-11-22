@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+
+  application_db:
+    container_name: application_db
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    volumes:
+      - application_db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=schema_name
+      - PGDATA=/var/lib/postgresql/data/pgdata
+
+volumes:
+  application_db: {}
