@@ -1,6 +1,7 @@
 package com.syngenta.rnd.certificate.management.dao;
 
-import lombok.Data;
+import com.syngenta.rnd.certificate.management.model.domain.OrderWithDomains;
+import com.syngenta.rnd.certificate.management.model.domain.StorageKey;
 import org.shredzone.acme4j.Order;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class OrderDao {
     private final Map<StorageKey, OrderWithDomains> map = new ConcurrentHashMap<>();
 
-    public OrderWithDomains getOrder(String userName, Collection<String> domains) {
+    public OrderWithDomains getOrderWithDomains(String userName, Collection<String> domains) {
         StorageKey storageKey = new StorageKey(userName, domains);
         return map.get(storageKey);
     }
@@ -22,17 +23,5 @@ public class OrderDao {
         StorageKey storageKey = new StorageKey(userName, domains);
         OrderWithDomains orderWithDomains = new OrderWithDomains(order, domains);
         map.put(storageKey, orderWithDomains);
-    }
-
-    @Data
-    private static class StorageKey {
-        private final String userName;
-        private final Collection<String> domains;
-    }
-
-    @Data
-    public static class OrderWithDomains {
-        private final Order order;
-        private final Set<String> domains;
     }
 }

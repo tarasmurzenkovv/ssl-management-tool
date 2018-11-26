@@ -27,11 +27,11 @@ public class ChallengeService {
     private final OrderService orderService;
     private final AccountService accountService;
 
-    public List<ChallengeInformation> createNewChallenge(ChallengeRequest createChallengeRequest) {
+    public List<ChallengeInformation> createChallenge(ChallengeRequest createChallengeRequest) {
         String userName = createChallengeRequest.getUserName();
         Set<String> domains = createChallengeRequest.getDomains();
         Account account = accountService.initializeLetsEncryptAccount(userName);
-        Order order = orderService.createOrder(userName, account, domains);
+        Order order = orderService.createAndStoreOrder(userName, account, domains);
         return ChallengeService.buildChallengeInformation(order);
     }
 
