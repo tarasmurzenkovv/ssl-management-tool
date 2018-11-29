@@ -44,9 +44,15 @@ public class CertificateService {
         parseAndUpdateCertificates(userName, order);
     }
 
+    @Transactional
+    public List<CertificateMetaInformation> findAllCertificatesForUserName(String userName) {
+        return certificateRecordRepository.findAllCertificatesForUserName(userName)
+                .map(certificateConverter::toCertificateMetaInformation)
+                .collect(Collectors.toList());
+    }
+
     public List<CertificateMetaInformation> findCertificates(String userName, Set<String> domains) {
         return certificateRecordRepository.findAllCertificatesForUserNameAndDomains(userName, domains)
-                .stream()
                 .map(certificateConverter::toCertificateMetaInformation)
                 .collect(Collectors.toList());
     }

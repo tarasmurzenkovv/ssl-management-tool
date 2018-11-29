@@ -6,6 +6,8 @@ import com.syngenta.rnd.certificate.management.model.dto.ChallengeRequest;
 import com.syngenta.rnd.certificate.management.service.authorization.ChallengeService;
 import com.syngenta.rnd.certificate.management.service.certificate.CertificateService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.Set;
 
+@CrossOrigin
 @RestController("/certificate")
 @RequiredArgsConstructor
 public class CertificateController {
@@ -35,8 +38,10 @@ public class CertificateController {
 
     @GetMapping
     public List<CertificateMetaInformation> findCertificates(@RequestParam("userName") String userName,
-                                                             @RequestParam("domains") Set<String> domains) {
-        return certificateService.findCertificates(userName, domains);
+                                                             @RequestParam(value = "domains", required = false) Set<String> domains) {
+        return CollectionUtils.isEmpty(domains)
+                ? certificateService.findAllCertificatesForUserName(userName)
+                : certificateService.findCertificates(userName, domains);
     }
 
     @PutMapping

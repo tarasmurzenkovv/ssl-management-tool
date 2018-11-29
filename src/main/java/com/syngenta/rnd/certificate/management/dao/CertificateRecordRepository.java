@@ -10,12 +10,17 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public interface CertificateRecordRepository extends JpaRepository<CertificateRecordEntity, Long> {
 
     @Query(" select certificate from CertificateRecordEntity certificate " +
+            "where certificate.userEntity.userName=:userName ")
+    Stream<CertificateRecordEntity> findAllCertificatesForUserName(@Param("userName") String userName);
+
+    @Query(" select certificate from CertificateRecordEntity certificate " +
             "where certificate.userEntity.userName=:userName and certificate.domain in :domains ")
-    List<CertificateRecordEntity> findAllCertificatesForUserNameAndDomains(@Param("userName") String userName,
+    Stream<CertificateRecordEntity> findAllCertificatesForUserNameAndDomains(@Param("userName") String userName,
                                                                            @Param("domains") Set<String> domains);
 
     default void updateCertificate(CertificateMetaInformation certificateMetaInformation, Long userId) {
