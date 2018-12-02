@@ -1,23 +1,34 @@
-import React from 'react';
+import * as React from "react";
 import {saveUserToCookie} from "../../service/userService";
 import UserModel from "../../model/UserModel";
+import {ChangeEvent} from "react";
 
-class LoginComponent extends React.Component {
+interface ILoginComponentState {
+    userName: string
+}
 
-    constructor(props) {
+interface ILoginComponentProps {
+    history: string[]
+}
+
+
+class LoginComponent extends React.Component<ILoginComponentProps, ILoginComponentState> {
+
+    constructor(props: ILoginComponentProps) {
         super(props);
         this.state = {
             userName: ''
         };
     }
 
-    setUserName = event => {
+    setUserName = (event: ChangeEvent<HTMLInputElement>) => {
         const userName = event.target.value;
         this.setState({userName: userName});
     };
 
     processLogin = () => {
         saveUserToCookie(new UserModel(this.state.userName, ['']));
+        console.log(this.state.userName);
         this.props.history.push('/manage-certificate/issue-new')
     };
 
