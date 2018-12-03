@@ -1,28 +1,28 @@
 import React from 'react';
-import {createCertificate} from "../../../../service/certificateService";
 import {getUserFromCookie} from "../../../../service/userService";
-import MDSpinner from "react-md-spinner";
+import {createCertificate} from "../../../../service/certificateService";
 
 export default class FetchCertificateComponent extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            certificate: null,
+            certificates: [],
             error: true,
             serverIsResponded: false,
-            fetchCertificateButtonWasClicked: false
+            fetchCertificateButtonWasClicked: false,
+            buttonText: 'Fetch Certificate'
         };
     }
 
     fetchCertificate = () => {
         const user = getUserFromCookie();
-        this.setState({fetchCertificateButtonWasClicked: true});
+        this.setState({fetchCertificateButtonWasClicked: true, buttonText: 'Fetching Certificate'});
         createCertificate(user.userName, this.props.unparsedDomains)
             .then(certificates => {
                 console.log('got certificate');
                 this.setState({
-                    certificate: certificates[0],
+                    certificate: certificates,
                     error: false
                 });
                 console.log('started rendering');
@@ -31,11 +31,11 @@ export default class FetchCertificateComponent extends React.Component {
                 console.log('error ' + error);
                 this.setState({error: true});
             })
-            .finally(() => this.setState({serverIsResponded: true}))
+            .finally(() => this.setState({serverIsResponded: true, buttonText: 'Fetched Certificate'}))
     };
 
     display = (state) => {
-        return (state.error) ? this.displayErrors(state.error) : this.displayCertificate(state.certificate);
+        return (state.error) ? this.displayErrors(state.error) : this.displayCertificates(state.certificate);
     };
 
     displayErrors = error => {
@@ -46,22 +46,28 @@ export default class FetchCertificateComponent extends React.Component {
         );
     };
 
+    displayCertificates = certificates => {
+        return (
+            <React.Fragment>
+                <label htmlFor="certificateBody">Certificates</label>
+                {certificates.map(certificate => this.displayCertificate(certificate))}
+                <small id="certificateBody"
+                       className="form-text text-muted mb-1">
+                    Copy generated SSL certificate.
+                </small>
+            </React.Fragment>
+        );
+    };
+
     displayCertificate = certificate => {
         return (
-            <form>
-                <label htmlFor="certificateBody">Certificate Body</label>
-                <div className="form-group">
-                    <textarea className="form-control"
-                              id="certificateBody"
-                              value={certificate.certificateBody}
-                              disabled
-                    />
-                    <small id="certificateBody"
-                           className="form-text text-muted">
-                        Copy generated SSL certificate.
-                    </small>
-                </div>
-            </form>
+            <React.Fragment>
+                <form>
+                    <div className="form-group">
+                        <textarea className="form-control" id="certificateBody" value={certificate.certificateBody} disabled/>
+                    </div>
+                </form>
+            </React.Fragment>
         );
     };
 
@@ -73,7 +79,7 @@ export default class FetchCertificateComponent extends React.Component {
                 <button className="btn btn-primary"
                         disabled={this.state.serverIsResponded || this.state.fetchCertificateButtonWasClicked}
                         onClick={this.fetchCertificate}>
-                    Fetch Certificate
+                    {this.state.buttonText}
                 </button>
             </React.Fragment>
         );

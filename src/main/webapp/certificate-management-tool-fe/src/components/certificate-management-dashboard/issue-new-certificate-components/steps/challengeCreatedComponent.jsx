@@ -1,6 +1,6 @@
 import React from 'react';
-import {submitChallenge} from "../../../../service/certificateService";
 import {getUserFromCookie} from "../../../../service/userService";
+import {submitChallenge} from "../../../../service/certificateService";
 
 class ChallengeCreatedComponent extends React.Component {
     constructor(props) {
