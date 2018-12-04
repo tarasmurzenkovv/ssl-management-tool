@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,6 +43,12 @@ public class CertificateController {
         return CollectionUtils.isEmpty(domains)
                 ? certificateService.findAllCertificatesForUserName(userName)
                 : certificateService.findCertificates(userName, domains);
+    }
+
+    @GetMapping("/information")
+    public CertificateMetaInformation findCertificate(@RequestParam String userName,
+                                                      @RequestParam Long certificateId) {
+        return certificateService.findCertificate(userName, certificateId);
     }
 
     @PutMapping

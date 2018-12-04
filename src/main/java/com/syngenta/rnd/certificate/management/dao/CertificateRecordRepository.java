@@ -9,10 +9,16 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
 public interface CertificateRecordRepository extends JpaRepository<CertificateRecordEntity, Long> {
+
+    @Query(" select certificate from CertificateRecordEntity certificate " +
+            "where certificate.userEntity.userName=:userName and certificate.id=:certificateId")
+    Optional<CertificateRecordEntity> findCertificateByUserNameAndCertificateId(@Param("userName") String userName,
+                                                                                @Param("certificateId") Long certificateId);
 
     @Query(" select certificate from CertificateRecordEntity certificate " +
             "where certificate.userEntity.userName=:userName ")

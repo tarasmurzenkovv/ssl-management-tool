@@ -2,23 +2,17 @@ import * as React from "react";
 import {saveUserToCookie} from "../../service/userService";
 import UserModel from "../../model/UserModel";
 import {ChangeEvent} from "react";
+import IRouterHistory from "../../model/IRouterHistory";
 
-interface ILoginComponentState {
-    userName: string
-}
+class LoginComponent extends React.Component<IRouterHistory, UserModel> {
 
-interface ILoginComponentProps {
-    history: string[]
-}
-
-
-class LoginComponent extends React.Component<ILoginComponentProps, ILoginComponentState> {
-
-    constructor(props: ILoginComponentProps) {
+    constructor(props: IRouterHistory) {
         super(props);
-        this.state = {
-            userName: ''
-        };
+        this.state = LoginComponent.getInitialState();
+    }
+
+    static getInitialState(): UserModel {
+        return new UserModel('',[]);
     }
 
     setUserName = (event: ChangeEvent<HTMLInputElement>) => {

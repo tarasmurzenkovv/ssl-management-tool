@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Data
 @Builder
 public class CertificateMetaInformation {
+    private final Long certificateId;
     private final String certificateBody;
     private final String principleDomain;
     private final LocalDate dateOfIssue;
