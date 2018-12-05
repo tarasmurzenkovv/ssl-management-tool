@@ -62,8 +62,8 @@ public class CertificateService {
         UserEntity userEntity = userRepository.findByUserNameOrElseThrowException(userName);
         List<CertificateMetaInformation> parsedCertificates = certificateParsingService.parseCertificate(certificate);
         List<CertificateRecordEntity> entities = certificateConverter.toCertificateRecordEntities(parsedCertificates, userEntity);
-        certificateRecordRepository.saveAll(entities);
-        return parsedCertificates;
+        List<CertificateRecordEntity> certificateRecordEntities = certificateRecordRepository.saveAll(entities);
+        return certificateConverter.toCertificateMetaInformation(certificateRecordEntities);
     }
 
     private void parseAndUpdateCertificates(String userName, Order order) {
@@ -82,5 +82,19 @@ public class CertificateService {
         authorizationService.authorize(order.getAuthorizations());
         orderService.pollOrder(order, domains);
         return order;
+    }
+
+    public CertificateMetaInformation findCertificate(String userName, Long certificateId) {
+        return certificateRecordRepository.findCertificateByUserNameAndCertificateId(userName, certificateId)
+                .map(certificateConverter::toCertificateMetaInformation)
+                .orElseThrow(() -> new RuntimeException(
+                        String.format("Cannot find certificate for user name '%s' and certificate id '%d'", userName, certificateId)
+                ));
+    }
+
+    @Transactional
+    public void deleteCertificate(String userName, Long certificateId) {
+        certificateRecordRepository.findCertificateByUserNameAndCertificateId(userName, certificateId)
+                .ifPresent(certificateRecordRepository::delete);
     }
 }

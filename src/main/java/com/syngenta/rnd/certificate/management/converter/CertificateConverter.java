@@ -29,8 +29,16 @@ public class CertificateConverter {
         return certificateRecordEntity;
     }
 
+    public List<CertificateMetaInformation> toCertificateMetaInformation(List<CertificateRecordEntity> certificateRecordEntity) {
+        return certificateRecordEntity
+                .stream()
+                .map(this::toCertificateMetaInformation)
+                .collect(Collectors.toList());
+    }
+
     public CertificateMetaInformation toCertificateMetaInformation(CertificateRecordEntity certificateRecordEntity) {
         return CertificateMetaInformation.builder()
+                .certificateId(certificateRecordEntity.getId())
                 .dateOfIssue(certificateRecordEntity.getIssuedDate())
                 .dateOfExpiration(certificateRecordEntity.getValidTill())
                 .principleDomain(certificateRecordEntity.getDomain())

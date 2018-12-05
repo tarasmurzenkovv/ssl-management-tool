@@ -53,12 +53,12 @@ public class CertificateParsingService {
     }
 
     private static LocalDate extractCertificateExpirationDate(X509Certificate x509Certificate) {
-        Date notAfter = x509Certificate.getNotAfter();
+        Date notAfter = x509Certificate.getNotBefore();
         return LocalDate.ofInstant(notAfter.toInstant(), ZoneId.systemDefault());
     }
 
     private static LocalDate extractCertificateIssuedDate(X509Certificate x509Certificate) {
-        Date notBefore = x509Certificate.getNotBefore();
+        Date notBefore = x509Certificate.getNotAfter();
         return LocalDate.ofInstant(notBefore.toInstant(), ZoneId.systemDefault());
     }
 

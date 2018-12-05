@@ -9,10 +9,17 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 
 public interface CertificateRecordRepository extends JpaRepository<CertificateRecordEntity, Long> {
+
+    @Query(" select certificate from CertificateRecordEntity certificate " +
+            "where certificate.userEntity.userName=:userName and certificate.id=:certificateId")
+    Optional<CertificateRecordEntity> findCertificateByUserNameAndCertificateId(@Param("userName") String userName,
+                                                                                @Param("certificateId") Long certificateId);
 
     @Query(" select certificate from CertificateRecordEntity certificate " +
             "where certificate.userEntity.userName=:userName ")
@@ -21,7 +28,7 @@ public interface CertificateRecordRepository extends JpaRepository<CertificateRe
     @Query(" select certificate from CertificateRecordEntity certificate " +
             "where certificate.userEntity.userName=:userName and certificate.domain in :domains ")
     Stream<CertificateRecordEntity> findAllCertificatesForUserNameAndDomains(@Param("userName") String userName,
-                                                                           @Param("domains") Set<String> domains);
+                                                                             @Param("domains") Set<String> domains);
 
     default void updateCertificate(CertificateMetaInformation certificateMetaInformation, Long userId) {
         String certificateBody = certificateMetaInformation.getCertificateBody();
@@ -43,4 +50,9 @@ public interface CertificateRecordRepository extends JpaRepository<CertificateRe
                            @Param("domain") String domain,
                            @Param("userId") Long userId);
 
+    @Modifying
+    @Query("delete from CertificateRecordEntity certificate " +
+            "where certificate.id=:certificateId and certificate.userEntity.userName=:userName")
+    void deleteCertificate(@Param("userName") String userName,
+                           @Param("certificateId") Long certificateId);
 }

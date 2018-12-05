@@ -18,4 +18,9 @@ public class UserRegistrationController {
     public Long registerUser(@RequestBody UserRegistrationRequest userRegistrationRequest) {
         return accountService.saveUserInformation(userRegistrationRequest);
     }
+
+    @PostMapping("/login")
+    public void login(@RequestBody UserRegistrationRequest userRegistrationRequest) {
+        accountService.checkIfUserExists(userRegistrationRequest);
+    }
 }

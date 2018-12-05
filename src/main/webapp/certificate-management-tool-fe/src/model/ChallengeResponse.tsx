@@ -1,5 +1,9 @@
 export default class ChallengeResponse {
-    constructor(content, fileName, host) {
+    content: string;
+    fileName: string;
+    host: string;
+
+    constructor(content: string, fileName: string, host: string) {
         this.content = content;
         this.fileName = fileName;
         this.host = host;

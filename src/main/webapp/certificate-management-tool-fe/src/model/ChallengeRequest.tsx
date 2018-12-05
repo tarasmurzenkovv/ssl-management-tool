@@ -1,5 +1,8 @@
 export default class ChallengeRequest {
-    constructor(userName, domains) {
+    userName: string;
+    domains: string;
+
+    constructor(userName: string, domains: string) {
         this.userName = userName;
         this.domains = domains;
     }

@@ -1,7 +1,7 @@
 import React from 'react';
 import NavigationBarComponent from "./navigationBarComponent";
 import {Route} from "react-router-dom";
-import ViewCertificatesComponent from "./viewCertificatesComponents";
+import ViewCertificatesComponent from "./view-certificates-components/viewCertificatesComponents";
 import CreateNewCertificateComponent from "./issue-new-certificate-components/createNewCertificateComponent";
 import {getUserFromCookie} from "../../service/userService";
 

@@ -1,26 +1,33 @@
-import React from 'react';
+import * as React from "react";
 import UserModel from '../../model/UserModel';
 import {registerUser, saveUserToCookie} from "../../service/userService";
+import IRouterHistory from "../../model/IRouterHistory";
+import {ChangeEvent} from "react";
 
-class RegistrationComponent extends React.Component {
+class RegistrationComponent extends React.Component<IRouterHistory, UserModel> {
 
-    constructor(props) {
+    constructor(props: IRouterHistory) {
         super(props);
-        this.state = {
-            userName: ''
-        };
+        this.state = RegistrationComponent.getInitialState();
     }
 
-    submitRegistrationRequest = event => {
+    static getInitialState(): UserModel {
+        return new UserModel('', '');
+    }
+
+    submitRegistrationRequest = (event: any) => {
         event.preventDefault();
-        this.user = new UserModel(this.state.userName);
-        registerUser(this.user)
+        this.state = new UserModel(this.state.userName, '');
+        registerUser(this.state)
             .then(response => console.log('registered user with id ' + response.data))
-            .then(() => saveUserToCookie(this.user))
+            .then(() => saveUserToCookie(this.state))
             .catch(error => console.log('error ' + error));
     };
 
-    readUserName = event => this.setState({userName: event.target.value});
+    readUserName = (event: ChangeEvent<HTMLInputElement>) => {
+        console.log(event.target.value);
+        this.setState({userName: event.target.value});
+    };
 
     render() {
         return (

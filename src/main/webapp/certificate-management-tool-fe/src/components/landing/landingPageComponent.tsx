@@ -1,7 +1,7 @@
 import React from 'react';
 import {NavLink} from "react-router-dom";
 
-class LandingPageComponent extends React.Component {
+export default class LandingPageComponent extends React.Component {
 
     render() {
         return (
@@ -23,5 +23,3 @@ class LandingPageComponent extends React.Component {
         );
     }
 }
-
-export default LandingPageComponent;
