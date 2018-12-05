@@ -48,9 +48,11 @@ export default class ViewCertificateComponent extends React.Component<IViewCerti
         return (
             <React.Fragment>
                 <div className="container-fluid">
-                    <h5> Certificate Details</h5>
                     <div className="row mt-lg-5">
-                        <div className="col">
+                        <div className="col-lg-5">
+                            <h5> Certificate Details</h5>
+                            <p>Expiration Date: {formatDate(this.props.certificate.dateOfExpiration)}</p>
+                            <p>Domains: {this.props.certificate.principleDomain}</p>
                             <form>
                                 <p>Certificate Body</p>
                                 <div className="form-group">
@@ -61,11 +63,6 @@ export default class ViewCertificateComponent extends React.Component<IViewCerti
                                 </div>
                             </form>
                             {this.renderActionButtons()}
-                        </div>
-                        <div className="col">
-                            <p>Issue information</p>
-                            <p>Expiration Date: {formatDate(this.props.certificate.dateOfExpiration)}</p>
-                            <p>Domains: {this.props.certificate.principleDomain}</p>
                         </div>
                     </div>
                 </div>

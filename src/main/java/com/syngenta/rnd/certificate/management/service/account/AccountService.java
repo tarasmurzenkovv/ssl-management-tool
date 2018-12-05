@@ -62,4 +62,9 @@ public class AccountService {
         userEntity.setKeyPair(keyPairAsString);
         return userEntity;
     }
+
+    public void checkIfUserExists(UserRegistrationRequest userRegistrationRequest) {
+        userRepository.findByUserName(userRegistrationRequest.getUserName())
+                .orElseThrow(() -> new RuntimeException("Cannot find user"));
+    }
 }

@@ -55,11 +55,6 @@ export default class ManageCertificateComponent extends React.Component<any, IVi
                 })
     }
 
-    renderToaster = (error: any) => {
-        return (
-            <ViewErrorsComponent error={error}/>
-        );
-    };
 
     render() {
         return (
@@ -67,9 +62,8 @@ export default class ManageCertificateComponent extends React.Component<any, IVi
                 <CertificateManagementDashboard/>
                 <ViewCertificateComponent certificate={this.state.certificate}
                                           actionForDeleteButton={() => this.deleteCertificate()}
-                                          actionForRenewButton={() => console.log('blah')}
-                />
-                {this.state.error && this.renderToaster(this.state.error)}
+                                          actionForRenewButton={() => console.log('blah')}/>
+                {this.state.error && <ViewErrorsComponent error={this.state.error}/>}
             </React.Fragment>
         );
     }

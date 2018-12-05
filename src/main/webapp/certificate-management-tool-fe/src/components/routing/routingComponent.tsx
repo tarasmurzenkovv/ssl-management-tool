@@ -8,7 +8,7 @@ import CertificateManagementDashboard from "../certificate-management-dashboard/
 import ManageCertificateComponent
     from "../certificate-management-dashboard/view-certificates-components/view-certificate/manageCertificateComponent";
 
-class RoutingComponent extends React.Component {
+export default class RoutingComponent extends React.Component {
     render() {
         return (
             <BrowserRouter>
@@ -24,5 +24,3 @@ class RoutingComponent extends React.Component {
         );
     }
 }
-
-export default RoutingComponent;

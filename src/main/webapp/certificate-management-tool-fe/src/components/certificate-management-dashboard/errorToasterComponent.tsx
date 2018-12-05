@@ -1,7 +1,7 @@
 import {toast, ToastContainer} from "react-toastify";
 import React from "react";
 
-class ViewErrorsComponent extends React.Component<any, any> {
+export default class ViewErrorsComponent extends React.Component<any, any> {
 
     constructor(props: any) {
         super(props);
@@ -24,5 +24,3 @@ class ViewErrorsComponent extends React.Component<any, any> {
         );
     }
 }
-
-export default ViewErrorsComponent;

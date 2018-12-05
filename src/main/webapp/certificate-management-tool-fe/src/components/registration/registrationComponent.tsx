@@ -12,12 +12,12 @@ class RegistrationComponent extends React.Component<IRouterHistory, UserModel> {
     }
 
     static getInitialState(): UserModel {
-        return new UserModel('', []);
+        return new UserModel('', '');
     }
 
     submitRegistrationRequest = (event: any) => {
         event.preventDefault();
-        this.state = new UserModel(this.state.userName, []);
+        this.state = new UserModel(this.state.userName, '');
         registerUser(this.state)
             .then(response => console.log('registered user with id ' + response.data))
             .then(() => saveUserToCookie(this.state))

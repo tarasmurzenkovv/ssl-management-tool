@@ -1,8 +1,8 @@
 export default class UserModel {
     userName: string;
-    domains: string[];
-    constructor(userName: string, domains: string[]) {
+    password: string;
+    constructor(userName: string, password: string) {
         this.userName = userName;
-        this.domains = domains;
+        this.password = password;
     }
 }

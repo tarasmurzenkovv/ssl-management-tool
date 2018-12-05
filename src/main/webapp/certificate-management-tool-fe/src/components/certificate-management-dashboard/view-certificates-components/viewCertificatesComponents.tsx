@@ -20,7 +20,7 @@ class ViewCertificatesComponent extends React.Component<any,ViewCertificatesStat
             0, 4, [], false, true);
     };
 
-    componentWillMount() {
+    componentDidMount() {
         this.fetchCertificates();
     }
 
@@ -178,7 +178,7 @@ class ViewCertificatesComponent extends React.Component<any,ViewCertificatesStat
             <React.Fragment>
                 <div className="container-fluid">
                     <div className="row mt-lg-5">
-                        {this.renderFullUi()}
+                        {!this.state.error && this.renderFullUi()}
                         {this.state.error && this.renderToaster(this.state.error)}
                     </div>
                 </div>
