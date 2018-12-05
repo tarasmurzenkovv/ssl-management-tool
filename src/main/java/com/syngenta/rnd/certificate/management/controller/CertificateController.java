@@ -8,6 +8,7 @@ import com.syngenta.rnd.certificate.management.service.certificate.CertificateSe
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 @CrossOrigin
-@RestController("/certificate")
+@RestController
 @RequiredArgsConstructor
 public class CertificateController {
     private final ChallengeService challengeService;
@@ -31,13 +32,13 @@ public class CertificateController {
         return challengeService.createChallenge(createChallengeRequest);
     }
 
-    @PostMapping
+    @PostMapping("/certificates")
     public List<CertificateMetaInformation> createCertificates(@RequestParam("userName") String userName,
                                                                @RequestParam("domains") Set<String> domains) {
         return certificateService.createCertificates(userName, domains);
     }
 
-    @GetMapping
+    @GetMapping("/certificates")
     public List<CertificateMetaInformation> findCertificates(@RequestParam("userName") String userName,
                                                              @RequestParam(value = "domains", required = false) Set<String> domains) {
         return CollectionUtils.isEmpty(domains)
@@ -45,13 +46,20 @@ public class CertificateController {
                 : certificateService.findCertificates(userName, domains);
     }
 
-    @GetMapping("/information")
+    @GetMapping("/certificate")
     public CertificateMetaInformation findCertificate(@RequestParam String userName,
                                                       @RequestParam Long certificateId) {
         return certificateService.findCertificate(userName, certificateId);
     }
 
-    @PutMapping
+    @DeleteMapping("/certificate")
+    public void deleteCertificate(@RequestParam String userName,
+                                  @RequestParam Long certificateId) {
+        certificateService.deleteCertificate(userName, certificateId);
+    }
+
+
+    @PutMapping("/certificates")
     public void renewCertificates(@RequestParam("userName") String userName,
                                   @RequestParam("domains") Set<String> domains) {
         certificateService.renewCertificates(userName, domains);

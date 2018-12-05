@@ -91,4 +91,10 @@ public class CertificateService {
                         String.format("Cannot find certificate for user name '%s' and certificate id '%d'", userName, certificateId)
                 ));
     }
+
+    @Transactional
+    public void deleteCertificate(String userName, Long certificateId) {
+        certificateRecordRepository.findCertificateByUserNameAndCertificateId(userName, certificateId)
+                .ifPresent(certificateRecordRepository::delete);
+    }
 }

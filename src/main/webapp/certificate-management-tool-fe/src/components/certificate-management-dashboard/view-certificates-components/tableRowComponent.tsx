@@ -19,7 +19,6 @@ export default class TableRowComponent extends React.Component<TableRowComponent
             {
                 certificates.map((certificate, index) => {
                     const linkPath = '/certificate/' + certificate.certificateId;
-                    console.log(certificate.certificateBody);
                     return (
                         <tr className={this.applyColorToRow(certificate)} key={index}>
                             <th>{index}</th>

@@ -1,17 +1,16 @@
 import {toast, ToastContainer} from "react-toastify";
 import React from "react";
-import {any} from "prop-types";
 
 class ViewErrorsComponent extends React.Component<any, any> {
 
-    constructor(props:any){
-        super(any);
+    constructor(props: any) {
+        super(props);
         this.state = {
             error: props.error
         }
     }
 
-    notify = (errors: any) => toast.error("" + errors, {
+    notify = (errorMessage: string) => toast.error(errorMessage, {
         type: toast.TYPE.ERROR,
         autoClose: 8000
     });
@@ -19,7 +18,7 @@ class ViewErrorsComponent extends React.Component<any, any> {
     render() {
         return (
             <React.Fragment>
-                {this.notify(this.state.error)}
+                {this.notify(this.state.error.message)}
                 <ToastContainer/>
             </React.Fragment>
         );

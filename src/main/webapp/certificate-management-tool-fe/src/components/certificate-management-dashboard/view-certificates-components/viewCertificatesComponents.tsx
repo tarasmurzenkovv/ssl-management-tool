@@ -7,11 +7,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import ViewCertificatesState from "../../../model/ViewCertificatesState";
 import CertificateModel from "../../../model/CertificateModel";
 import TableRowComponent from "./tableRowComponent";
-import ViewErrorsComponent from "../errorComponent";
+import ViewErrorsComponent from "../errorToasterComponent";
 
-class ViewCertificatesComponent extends React.Component<{}, ViewCertificatesState> {
-    constructor({}) {
-        super({});
+class ViewCertificatesComponent extends React.Component<any,ViewCertificatesState> {
+    constructor(props:any) {
+        super(props);
         this.state = ViewCertificatesComponent.initState();
     }
 
@@ -20,7 +20,7 @@ class ViewCertificatesComponent extends React.Component<{}, ViewCertificatesStat
             0, 4, [], false, true);
     };
 
-    componentDidMount() {
+    componentWillMount() {
         this.fetchCertificates();
     }
 
@@ -161,9 +161,15 @@ class ViewCertificatesComponent extends React.Component<{}, ViewCertificatesStat
     renderFullUi = () => {
         return (
             <React.Fragment>
-                {this.state.serverIsResponded && !this.state.error && this.display()}
-                {this.state.serverIsResponded && !this.state.error && this.displayNavigationButtons()}
+                {this.state.serverIsResponded && this.display()}
+                {this.state.serverIsResponded && this.displayNavigationButtons()}
             </React.Fragment>
+        );
+    };
+
+    renderToaster = (error: any) => {
+        return (
+            <ViewErrorsComponent error={error}/>
         );
     };
 
@@ -173,7 +179,7 @@ class ViewCertificatesComponent extends React.Component<{}, ViewCertificatesStat
                 <div className="container-fluid">
                     <div className="row mt-lg-5">
                         {this.renderFullUi()}
-                        <ViewErrorsComponent errors = {this.state.error}/>
+                        {this.state.error && this.renderToaster(this.state.error)}
                     </div>
                 </div>
             </React.Fragment>

@@ -5,8 +5,8 @@ import LandingPageComponent from "../landing/landingPageComponent";
 import ErrorComponent from "../error/errorComponent";
 import RegistrationComponent from "../registration/registrationComponent";
 import CertificateManagementDashboard from "../certificate-management-dashboard/certificateManagementDashboard";
-import ViewCertificateComponent
-    from "../certificate-management-dashboard/view-certificates-components/viewCertificateComponent";
+import ManageCertificateComponent
+    from "../certificate-management-dashboard/view-certificates-components/view-certificate/manageCertificateComponent";
 
 class RoutingComponent extends React.Component {
     render() {
@@ -17,7 +17,7 @@ class RoutingComponent extends React.Component {
                     <Route path="/login" component={LoginComponent}/>
                     <Route path="/register" component={RegistrationComponent}/>
                     <Route path="/manage-certificate" component={CertificateManagementDashboard}/>
-                    <Route path="/certificate/:certificateId" component={ViewCertificateComponent}/>
+                    <Route path="/certificate/:certificateId" component={ManageCertificateComponent}/>
                     <Route component={ErrorComponent}/>
                 </Switch>
             </BrowserRouter>
