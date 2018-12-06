@@ -16,7 +16,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,15 +52,6 @@ public class JwtTokenProvider {
     private String getUsername(String token) {
         String keyEncodedAsBase64 = securityConfigurationHolder.getKeyEncodedAsBase64();
         return Jwts.parser().setSigningKey(keyEncodedAsBase64).parseClaimsJws(token).getBody().getSubject();
-    }
-
-    String resolveToken(HttpServletRequest req) {
-        String bearerTokenHeaderName = req.getHeader("Authorization");
-        String bearerTokeHeaderValuePrefix = "Bearer ";
-        if (bearerTokenHeaderName != null && bearerTokenHeaderName.startsWith(bearerTokeHeaderValuePrefix)) {
-            return bearerTokenHeaderName.substring(bearerTokeHeaderValuePrefix.length());
-        }
-        return null;
     }
 
     boolean validateToken(String token) {

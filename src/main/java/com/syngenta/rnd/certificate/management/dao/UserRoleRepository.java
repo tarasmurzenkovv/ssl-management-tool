@@ -7,6 +7,5 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface UserRoleRepository extends JpaRepository<UserRoleEntity, Long> {
-    @Query(" select userRole from UserRoleEntity userRole where userRole.userRole=:userRole ")
-    UserRoleEntity findByUserRole(@Param("userRole") UserRole userRole);
+    UserRoleEntity findByUserRole(UserRole userRole);
 }

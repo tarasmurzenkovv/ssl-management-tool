@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.Set;
 
-@PreAuthorize("hasRole('ROLE_CLIENT')")
+@PreAuthorize("hasRole('ROLE_CLIENT') or hasRole('ROLE_ADMIN')")
 @RestController
 @RequiredArgsConstructor
 public class CertificateController {

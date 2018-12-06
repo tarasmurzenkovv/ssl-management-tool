@@ -1,7 +1,6 @@
 package com.syngenta.rnd.certificate.management.service.security;
 
 import com.syngenta.rnd.certificate.management.dao.UserRepository;
-import com.syngenta.rnd.certificate.management.model.security.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +17,7 @@ public class ApplicationUserDetailsService implements UserDetailsService {
         return userRepository
                 .findByUserName(username)
                 .map(userEntity -> User.withUsername(userEntity.getUserName())
-                        .authorities(UserRole.ROLE_ADMIN.name())
+                        .authorities(userEntity.getUserRoleEntity().getUserRole().name())
                         .password(userEntity.getUserPassword())
                         .build())
                 .orElseThrow(() -> new RuntimeException("Cannot find user for the given user name " + username));
