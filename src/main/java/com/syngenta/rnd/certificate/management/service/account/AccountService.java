@@ -1,9 +1,12 @@
 package com.syngenta.rnd.certificate.management.service.account;
 
 import com.syngenta.rnd.certificate.management.dao.UserRepository;
+import com.syngenta.rnd.certificate.management.dao.UserRoleRepository;
 import com.syngenta.rnd.certificate.management.model.dto.UserRegistrationRequest;
 import com.syngenta.rnd.certificate.management.model.entity.UserEntity;
+import com.syngenta.rnd.certificate.management.model.security.UserRole;
 import com.syngenta.rnd.certificate.management.service.keypair.KeyPairService;
+import com.syngenta.rnd.certificate.management.service.security.JWTAuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +14,7 @@ import org.shredzone.acme4j.Account;
 import org.shredzone.acme4j.AccountBuilder;
 import org.shredzone.acme4j.Session;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -23,13 +27,17 @@ import java.security.KeyPair;
 public class AccountService {
     private final KeyPairService keyPairService;
     private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JWTAuthenticationService jwtAuthenticationService;
 
     @Transactional
-    public Long saveUserInformation(UserRegistrationRequest userRegistrationRequest) {
-        String userName = userRegistrationRequest.getUserName();
+    public String saveUserInformation(UserRegistrationRequest userRegistrationRequest) {
         ByteArrayOutputStream keyPairOutPutStream = keyPairService.createKeyPairAsByteOutputStream();
-        UserEntity userEntity = createUserEntity(userName, keyPairOutPutStream);
-        return userRepository.save(userEntity).getId();
+        UserEntity userEntity = createUserEntity(userRegistrationRequest, keyPairOutPutStream);
+        userEntity.setUserPassword(passwordEncoder.encode(userRegistrationRequest.getPassword()));
+        userRepository.save(userEntity);
+        return jwtAuthenticationService.generateTokenForRegister(userRegistrationRequest);
     }
 
     public Account initializeLetsEncryptAccount(String userName) {
@@ -55,16 +63,19 @@ public class AccountService {
                 .create(session);
     }
 
-    private static UserEntity createUserEntity(String userName, ByteArrayOutputStream byteArrayOutputStream) {
+    private UserEntity createUserEntity(UserRegistrationRequest userRegistrationRequest, ByteArrayOutputStream byteArrayOutputStream) {
         String keyPairAsString = new String(byteArrayOutputStream.toByteArray());
         UserEntity userEntity = new UserEntity();
-        userEntity.setUserName(userName);
+        userEntity.setUserName(userRegistrationRequest.getUserName());
+        userEntity.setUserPassword(userRegistrationRequest.getPassword());
+        userEntity.setUserRoleEntity(userRoleRepository.findByUserRole(UserRole.valueOf(userRegistrationRequest.getUserRole())));
         userEntity.setKeyPair(keyPairAsString);
         return userEntity;
     }
 
-    public void checkIfUserExists(UserRegistrationRequest userRegistrationRequest) {
+    public String loginUser(UserRegistrationRequest userRegistrationRequest) {
         userRepository.findByUserName(userRegistrationRequest.getUserName())
                 .orElseThrow(() -> new RuntimeException("Cannot find user"));
+        return jwtAuthenticationService.generateTokenForLogin(userRegistrationRequest);
     }
 }

@@ -10,7 +10,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.lordofthejars.foo" level="INFO" additivity="false">
+    <logger name="com.lordofthejars.foo" level="ERROR" additivity="false">
         <appender-ref ref="STDOUT" />
     </logger>
 

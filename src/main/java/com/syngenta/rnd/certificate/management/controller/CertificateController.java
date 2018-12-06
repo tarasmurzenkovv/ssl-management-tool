@@ -6,11 +6,10 @@ import com.syngenta.rnd.certificate.management.model.dto.ChallengeRequest;
 import com.syngenta.rnd.certificate.management.service.authorization.ChallengeService;
 import com.syngenta.rnd.certificate.management.service.certificate.CertificateService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.Set;
 
-@CrossOrigin
+@PreAuthorize("hasRole('ROLE_CLIENT')")
 @RestController
 @RequiredArgsConstructor
 public class CertificateController {
