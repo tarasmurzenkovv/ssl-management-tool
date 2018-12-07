@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    <application_user_role id="1" role_name="ADMIN"/>
+    <application_user_role id="2" role_name="CLIENT"/>
+</dataset>

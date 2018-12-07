@@ -4,7 +4,7 @@ import com.syngenta.rnd.certificate.management.dao.UserRepository;
 import com.syngenta.rnd.certificate.management.dao.UserRoleRepository;
 import com.syngenta.rnd.certificate.management.model.dto.UserRegistrationRequest;
 import com.syngenta.rnd.certificate.management.model.entity.UserEntity;
-import com.syngenta.rnd.certificate.management.model.security.UserRole;
+import com.syngenta.rnd.certificate.management.model.entity.UserRoleEntity;
 import com.syngenta.rnd.certificate.management.service.keypair.KeyPairService;
 import com.syngenta.rnd.certificate.management.service.security.JWTAuthenticationService;
 import lombok.RequiredArgsConstructor;
@@ -64,11 +64,14 @@ public class AccountService {
     }
 
     private UserEntity createUserEntity(UserRegistrationRequest userRegistrationRequest, ByteArrayOutputStream byteArrayOutputStream) {
-        String keyPairAsString = new String(byteArrayOutputStream.toByteArray());
         UserEntity userEntity = new UserEntity();
+        String userRole = userRegistrationRequest.getUserRole();
+        String keyPairAsString = new String(byteArrayOutputStream.toByteArray());
         userEntity.setUserName(userRegistrationRequest.getUserName());
         userEntity.setUserPassword(userRegistrationRequest.getPassword());
-        userEntity.setUserRoleEntity(userRoleRepository.findByUserRole(UserRole.valueOf(userRegistrationRequest.getUserRole())));
+        UserRoleEntity userRoleEntity = userRoleRepository.findByUserRole(userRole)
+                .orElseThrow(() -> new RuntimeException(String.format("Cannot find the given user role '%s'", userRole)));
+        userEntity.setUserRoleEntity(userRoleEntity);
         userEntity.setKeyPair(keyPairAsString);
         return userEntity;
     }

@@ -14,6 +14,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
                 .orElseThrow(() -> new RuntimeException("Cannot find user for user name " + userName));
     }
 
-    @Query("select user from  UserEntity  user where user.userName=:userName")
+    @Query("select user from UserEntity  user where user.userName=:userName")
     Optional<UserEntity> findByUserName(@Param("userName") String userName);
 }
