@@ -1,9 +1,19 @@
 import * as React from "react";
-import UserModel from "../../model/UserModel";
 import {ChangeEvent} from "react";
-import IRouterHistory from "../../model/IRouterHistory";
-import ValidationError, {loginUser, saveUserToCookie, validateUserLoginInputFields} from "../../service/userService";
 import ViewErrorsComponent from "../certificate-management-dashboard/errorToasterComponent";
+import {UserService} from "../../service/userService";
+import UserModel from "../../model/UserModel";
+import IRouterHistory from "../../model/IRouterHistory";
+
+class ValidationError {
+    fieldName: string;
+    errorMessage: string;
+
+    constructor(fieldName: string, errorMessage: string) {
+        this.fieldName = fieldName;
+        this.errorMessage = errorMessage;
+    }
+}
 
 interface ILoginComponentState {
     user: UserModel,
@@ -27,6 +37,19 @@ class LoginComponent extends React.Component<IRouterHistory, ILoginComponentStat
         }
     }
 
+    static validateUserLoginInputFields = (user: UserModel) => {
+        const login = user.userName;
+        const password = user.password;
+        if (null == login || '' == login) {
+            return new ValidationError('inputLogin', 'User login cannot be empty');
+        }
+        if (null == password || '' == password) {
+            return new ValidationError('inputPassword', 'User password cannot be empty');
+        }
+
+        return null;
+    };
+
     setLogin = (event: ChangeEvent<HTMLInputElement>) => {
         this.setState({
             user: {
@@ -47,14 +70,14 @@ class LoginComponent extends React.Component<IRouterHistory, ILoginComponentStat
 
     processLogin = (event: any) => {
         event.preventDefault();
-        const error = validateUserLoginInputFields(this.state.user);
+        const error = LoginComponent.validateUserLoginInputFields(this.state.user);
         if (error == null) {
-            loginUser(this.state.user)
+            UserService.loginUser(this.state.user)
                 .then(() => {
-                    saveUserToCookie(this.state.user);
+                    UserService.saveUserToCookie(this.state.user);
                     this.props.history.push('/manage-certificate/view-issued');
                 })
-                .catch(error => this.setState({
+                .catch((error: any) => this.setState({
                     error: new ValidationError('server-error', error.toString())
                 }));
 
@@ -112,6 +135,7 @@ class LoginComponent extends React.Component<IRouterHistory, ILoginComponentStat
                         </div>
 
                         <button
+                            id="buttonLogin"
                             className="btn btn-lg btn-primary btn-block"
                             onClick={this.processLogin}
                             type="submit">

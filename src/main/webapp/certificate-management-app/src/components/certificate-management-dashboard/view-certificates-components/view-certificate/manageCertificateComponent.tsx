@@ -1,10 +1,10 @@
 import React from "react";
 import CertificateModel from "../../../../model/CertificateModel";
-import {getUserFromCookie} from "../../../../service/userService";
 import {deleteCertificate, getCertificate} from "../../../../service/certificateService";
 import ViewCertificateComponent from "./viewCertificateComponent";
 import ViewErrorsComponent from "../../errorToasterComponent";
 import UserModel from "../../../../model/UserModel";
+import {UserService} from "../../../../service/userService";
 import CertificateManagementDashboard from "../../certificateManagementDashboard";
 
 interface IViewCertificateComponentState {
@@ -19,7 +19,7 @@ export default class ManageCertificateComponent extends React.Component<any, IVi
     static initState(certificateIdFromProps: number): IViewCertificateComponentState {
         return {
             certificate: CertificateModel.defaultValue(),
-            user: getUserFromCookie(),
+            user: UserService.getUserFromCookie(),
             passedCertificateId: certificateIdFromProps,
             error: null
         }
@@ -57,8 +57,10 @@ export default class ManageCertificateComponent extends React.Component<any, IVi
 
 
     render() {
+
         return (
             <React.Fragment>
+                // @ts-ignore
                 <CertificateManagementDashboard/>
                 <ViewCertificateComponent certificate={this.state.certificate}
                                           actionForDeleteButton={() => this.deleteCertificate()}

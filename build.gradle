@@ -71,4 +71,6 @@ dependencies {
     testCompile group: 'org.dbunit', name: 'dbunit', version: '2.5.0'
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.197'
     testCompile group: 'com.jayway.restassured', name: 'rest-assured', version: '2.9.0'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.3.2'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.3.2'
 }

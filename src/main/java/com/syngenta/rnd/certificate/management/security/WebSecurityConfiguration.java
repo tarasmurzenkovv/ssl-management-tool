@@ -2,6 +2,7 @@ package com.syngenta.rnd.certificate.management.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@ConditionalOnProperty(name = "enable.spring.security")
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final JwtTokenFilterConfigurer jwtTokenFilterConfigurer;
 
@@ -28,8 +30,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()//
                 .antMatchers("/registration").permitAll()//
                 .antMatchers("/login").permitAll()//
-                .anyRequest()
-                    .authenticated();
+                .anyRequest().authenticated();
+
         http.exceptionHandling().accessDeniedPage("/login");
         http.apply(jwtTokenFilterConfigurer);
     }

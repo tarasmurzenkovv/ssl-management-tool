@@ -2,19 +2,18 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Checking out from repo ...') {
+            steps {
+                git 'https://github.com/terancet/ssl-management-tool'
+            }
+        }
+        stage('Building and testing') {
             steps {
                 echo 'Building..'
-            }
-        }
-        stage('Test') {
-            steps {
+                sh 'gradlew clean build -x test'
+
                 echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
+                sh 'gradlew clean build'
             }
         }
     }
